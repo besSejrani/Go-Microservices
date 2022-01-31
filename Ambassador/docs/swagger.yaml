@@ -1,0 +1,46 @@
+basePath: /
+definitions:
+  models.User:
+    properties:
+      email:
+        type: string
+      firstName:
+        type: string
+      id:
+        type: integer
+      lastName:
+        type: string
+    type: object
+host: localhost:4000
+info:
+  contact:
+    email: fiber@swagger.io
+    name: API Support
+  description: This is a sample swagger for Fiber
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Golang Ambassador
+  version: "2.0"
+paths:
+  /api/admin/ambassadors:
+    get:
+      consumes:
+      - application/json
+      description: Get all ambassadors.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.User'
+            type: array
+      summary: get all ambassadors
+      tags:
+      - Ambassadors
+schemes:
+- http
+swagger: "2.0"

@@ -6,11 +6,34 @@ import (
 	"ambassador/Controllers/product"
 	user "ambassador/Controllers/user"
 	middlewares "ambassador/Middlewares"
+	"html/template"
 
+	swagger "github.com/arsmn/fiber-swagger/v2"
 	"github.com/gofiber/fiber/v2"
 )
 
 func Setup(app *fiber.App) {
+
+	// app.Get("/*", swagger.New(swagger.ConfigDefault)) // default
+
+	app.Get("/*", swagger.New(swagger.Config{ // custom
+
+		Title:  "Swagger UI",
+		Layout: "StandaloneLayout",
+		Plugins: []template.JS{
+			template.JS("SwaggerUIBundle.plugins.DownloadUrl"),
+		},
+		Presets: []template.JS{
+			template.JS("SwaggerUIBundle.presets.apis"),
+			template.JS("SwaggerUIStandalonePreset"),
+		},
+		DeepLinking:              true,
+		DefaultModelsExpandDepth: 1,
+		DefaultModelExpandDepth:  1,
+		DefaultModelRendering:    "example",
+		DocExpansion:             "list",
+		ShowMutatedRequest:       true,
+	}))
 
 	// Prefix
 	api := app.Group("api")
@@ -29,6 +52,7 @@ func Setup(app *fiber.App) {
 	//-----------------------------------------
 
 	adminAuthenticated := admin.Use(middlewares.IsAuthenticated)
+
 	adminAuthenticated.Post("/logout", auth.Logout)
 	adminAuthenticated.Get("/user", user.GetUser)
 
